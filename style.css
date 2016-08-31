@@ -1,0 +1,132 @@
+/*
+To compile:
+cd into folder
+sass -s --watch style.scss:style.css
+*/
+/** colors */
+body {
+  padding-top: 50px;
+  /*to account for the navbar*/
+  padding-bottom: 50px;
+  font-weight: 200;
+  min-width: 970px;
+  /*color-background:#000;*/ }
+
+.container {
+  margin: auto;
+  width: 90%;
+  max-width: none !important; }
+
+div.TextBox{
+   display: flex;
+    justify-content: center;
+    width:100%;
+
+
+}  
+
+.dropdown-menu a.active {
+  /*font-weight:@font-weight-medium;*/
+  color: #ffffff;
+  background-color: #1f77b4; }
+
+.light {
+  color: #aaaaaa; }
+
+.medium-grey {
+  color: #666666; }
+
+.ib {
+  display: inline-block; }
+
+.b {
+  display: block; }
+
+.strong {
+  font-weight: 500; }
+
+.title {
+  color: #666666;
+  margin-bottom: 5px; }
+
+.highlight {
+  color: steelblue; }
+
+#keyboards {
+  text-align: center;
+  margin: auto;
+  display: block; }
+
+.kb-div {
+  text-align: center;
+  margin: auto;
+  display: inline-block;
+  padding: 10px; }
+
+.kb-div h5 {
+  display: inline;
+  font-weight: 400; }
+
+.key rect {
+  
+  stroke: #bbb; }
+
+.key.not-present rect {
+  fill: #fff;
+  stroke: #dedede; }
+
+.dots {
+  fill-opacity: 0.5; }
+
+.dots:hover {
+  fill-opacity: 1;
+  fill: #aa0000; }
+
+.config-0 {
+  fill: #1f77b4; }
+
+.config-1 {
+  fill: #ff7f0e; }
+
+.navbar-nav .legend {
+  padding: 8px 10px; }
+
+.navbar-nav .legend.config-0 {
+  background-color: #1f77b4;
+  color: #ffffff;
+  font-weight: 500; }
+
+.navbar-nav .legend.config-1 {
+  background-color: #ff7f0e;
+  font-weight: 500;
+  margin-left: 5px;
+  color: #222; }
+
+input#upload_file.form-control {
+  max-width: 220px !important; }
+
+.navbar-nav li.legend {
+  padding: 10px 15px;
+  margin-top: 5px;
+  color: #aaa; }
+
+#legend-scale {
+  color: #aaa;
+  padding-right: 0px; }
+
+#legend-svg {
+  border-left: 1px solid #aaa;
+  margin-left: 15px;
+  padding-left: 5px; }
+
+#legend-svg circle, #legend-svg text {
+  fill: aaa; }
+
+#opacity-legend-svg {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 20px;
+  padding: 0 10px 10px 10px;
+  width: 265px;
+  font-size: 0.8em;
+  /*float:right;*/ }

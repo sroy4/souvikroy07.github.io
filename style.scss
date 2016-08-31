@@ -1,0 +1,146 @@
+/*
+To compile:
+cd into folder
+sass -s --watch style.scss:style.css
+*/
+
+$font-weight-light: 200;
+$font-weight-medium: 400;
+$font-weight-heavy: 500;
+
+/** colors */
+$steelblue:                 #1f77b4;
+$orange:                    #ff7f0e;
+$green:                     #2ca02c;
+$red:                       #aa0000;
+$yellow:                    #ffff00;
+
+$light-gray:				#aaaaaa;
+$medium-gray:				#666666;
+
+body{
+	padding-top:50px; /*to account for the navbar*/
+	padding-bottom:50px;
+	font-weight:$font-weight-light;
+	min-width:970px;
+	/*color-background:#000;*/
+}
+.container{ 
+	margin:auto; 
+	width:90%; 
+	max-width: none !important;
+}
+ 
+ 
+.dropdown-menu a.active{
+    /*font-weight:@font-weight-medium;*/
+    color:#ffffff;
+    background-color:$steelblue;
+}
+.light{
+	color: $light-gray;
+}
+.medium-grey{ 
+	color:$medium-gray;
+}
+.ib{
+	display:inline-block;
+}
+.b{ 
+	display:block;
+}
+.strong{
+	font-weight:$font-weight-heavy;
+}
+.title{
+	color:$medium-gray;
+	margin-bottom:5px;
+}
+
+.highlight{
+	color:steelblue;
+}
+#keyboards{
+	text-align:center;
+	margin:auto;
+	display:block;
+}
+.kb-div{ 
+	text-align:center;
+	margin:auto;
+	display:inline-block;
+	padding:10px;
+}
+.kb-div h5{
+	display:inline;
+	font-weight:$font-weight-medium;
+}
+.key rect{
+	fill:#aaa;
+	stroke:#bbb;
+}
+.key.not-present rect{
+	fill:#fff;
+	stroke:#dedede;
+}
+.dots{
+	fill-opacity:0.5;
+}
+.dots:hover{
+	fill-opacity:1;
+	fill:$red;
+}
+ 
+.config-0{
+	fill:$steelblue;
+}
+.config-1{
+	fill:$orange;
+}
+.navbar-nav .legend{
+	padding:8px 10px;
+}
+.navbar-nav .legend.config-0{
+	background-color:$steelblue;
+	color:#ffffff;
+	font-weight: $font-weight-heavy
+}
+.navbar-nav .legend.config-1{
+	background-color:$orange;
+	font-weight: $font-weight-heavy;
+	margin-left:5px;
+	color:#222;
+}
+input#upload_file.form-control{ max-width:220px !important;}
+ 
+.navbar-nav  li.legend{
+	padding:10px 15px;
+	margin-top:5px;
+	color:#aaa;
+}
+#legend-scale{ 
+	color:#aaa;
+	padding-right:0px;
+}
+#legend-svg{
+	border-left :1px solid #aaa;
+	margin-left:15px; padding-left:5px;
+}
+#legend-svg circle, #legend-svg text{
+	fill:aaa;
+}
+ 
+#opacity-legend-svg{ 
+	border:1px solid #ccc;
+	border-radius: 4px;
+	margin-top:20px;
+	padding:0 10px 10px 10px;
+
+	width:265px;
+	font-size:0.8em;
+	/*float:right;*/
+}
+
+
+
+
