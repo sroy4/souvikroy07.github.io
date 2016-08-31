@@ -253,20 +253,20 @@ var Keyboard = function(){
 
 
 
-    	console.log(key);
+    	
 		// foreignObject
 		// .attr("src", imagePath) 
 
-    	key.on('mouseover',function(d){
+    	// key.on('mouseover',function(d){
     		
-	    	d3.select(this)
-	    		.attr('data-original-title',mouseoverKeyText)
-	    		.attr('filter','none');
-	    		//.attr('fill-opacity','1')//.attr("border",1).style("stroke", 'black').style("stroke-width", 1)
-	    		//.attr( 'filter', 'url(#dropshadow)' )
-	    		//.transition()
-     			//.duration(100);
-	    });
+	    // 	d3.select(this)
+	    // 		.attr('data-original-title',mouseoverKeyText)
+	    // 		.attr('filter','none');
+	    // 		//.attr('fill-opacity','1')//.attr("border",1).style("stroke", 'black').style("stroke-width", 1)
+	    // 		//.attr( 'filter', 'url(#dropshadow)' )
+	    // 		//.transition()
+     // 			//.duration(100);
+	    // });
 
 	    key.on('mouseout',function(d){
 	    	d3.select(this)
