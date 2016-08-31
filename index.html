@@ -1,0 +1,138 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+        <meta name="description" content="Description Goes Here">
+        
+
+      
+
+        <!-- <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
+        <link href="vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <!-- <link href="vendor/css/bootstrap-non-responsive.css" rel="stylesheet" type="text/css"> -->
+        <link href="vendor/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css">
+        <!-- <link rel="stylesheet" href="vendor/css/bootstrap-sidebar.css"> -->
+
+        <link href="style.css"  rel="stylesheet" type="text/css">
+
+        
+ 
+    </head>
+
+    <body>
+
+        <!-- If you want a fixed header  -->
+        <div class="container">
+            <div class="navbar-header navbar-inverse navbar-fixed-top inactive-until-load" id="navbar">
+                <!-- File Selector -->
+                <form class="navbar-form navbar-left" action='' enctype='multipart/form-data' id="upload_form">
+                    <div class="form-group inline-form">
+                        <input type='file' class='form-control' id='upload_file' webkitdirectory directory  multiple> 
+                        <input type='submit' class="btn btn-primary" id='upload_btn' value='upload'>
+                    </div>
+                </form>
+
+                <ul class="nav navbar-nav navbar-left" id="navbar-show-what-links">
+                    <li class="chart-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">X<b class="caret"></b></a>
+                    </li>
+                   <!--  <li class="chart-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  id='users'></a>
+                    </li> -->
+                </ul>
+
+                <ul class="nav navbar-nav navbar-center" id="navbar-show-folder-links">
+                    <li class="chart-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Y<b class="caret"></b></a>
+                    </li>
+                   <!--  <li class="chart-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  id='users'></a>
+                    </li> -->
+                </ul>
+
+                
+            </div>
+        </div>
+
+        
+        <!-- Charts / Labels -->
+        <div class ='TextBox'>
+            <textarea id="echoField" rows="7" cols="60" style="width: 1085px; height: 25px; font-family: Verdana, Arial, Helvetica, Geneva, Sans-Serif; font-size: 12px;" ></textarea> 
+        </div>
+
+
+
+        <div class='container'>
+        <!--    
+        <div class='row'>
+            <div class='col-xs-8 labels'>
+                <div class='labels'>
+                    <h1 class='title'><span contentEditable=true>Keyboard Acoustic Data </span></h1>
+                    
+                    <div>Wavelet transform plots for audio data from all keys. 
+                    <br/>In a given key plot, y-axis(log scale) corresponds to Frequency(Hz) and x-axis corresponds to Time(seconds).
+                 
+                    </div>
+                </div>
+            </div>
+
+            <div class='col-xs-1'></div>
+            <div class='col-xs-3'>
+            </div>
+        </div>
+        -->
+             
+            
+            <div>
+            <div id='keyboards-large'></div>
+            <div id='keyboards'></div>
+            </div>  
+            
+            <!--
+            <div class='labels'>
+                    
+                    <p class='text-center' id="KBName"></p>
+            </div>
+            -->
+
+
+
+            <hr/>
+            <!-- <a id="KB-LayoutToggle">Show Keyboard Layout</a> -->
+
+            <!-- Added by Souvik-->
+            <div id="largeImgPanel" onclick="this.style.display='none'">
+            <img id="largeImg"
+                 style="height:50%; margin:0; padding:0;" />
+            </div>
+
+
+            <audio id="audiotag1" preload="auto">
+            </audio>
+
+
+            <h3>The Keyboard Layout</h3>
+            <div class='text-center'><img src = 'images/KB-Layout.png' id="KB-LayoutImage"/> </div>
+            <hr/>
+
+        <script src="vendor/js/jquery.min.js"></script>
+        <script src="vendor/js/bootstrap.min.js"></script>
+        <script src="vendor/js/bootstrap-multiselect.js"></script>
+       
+        <script src="vendor/js/d3.min.js"></script>
+        <script src="vendor/js/d3.slider.js"></script>
+        <script src='vendor/js/underscore.1.6.0.js'></script>
+        
+        <!-- mine -->
+        <script src="keyboard.js"></script>
+        <script src="main.js"></script>
+
+        </div>
+
+ 
+        </select>
+
+    </body>
+
+</html>
