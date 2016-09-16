@@ -45,6 +45,10 @@
     headers.forEach(function(d){
     	if(d.indexOf('Rate') > -1 ) rateElems.push(d);
     })
+
+    window.onload = function () {
+          var area = new AutoSuggestControl("echoField");    
+          }
    
     d3.csv('data/XY.csv',function(csv){
     	csv.forEach(function(d){ d.X = +d.X; d.Y = +d.Y; })
