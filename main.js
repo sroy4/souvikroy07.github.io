@@ -1,3 +1,10 @@
+    var word_list=[];
+    d3.csv("/data/words.csv", function(data) {
+  		data.forEach(function(d) {
+    	word_list.push(d["word"]);
+  		});
+	});
+
 (function(){
 
 	"use strict";
@@ -42,13 +49,18 @@
     var quickLoad = true;
     var kbLarge;
 
+
     headers.forEach(function(d){
     	if(d.indexOf('Rate') > -1 ) rateElems.push(d);
     })
 
-    window.onload = function () {
-          var area = new AutoSuggestControl("echoField");    
-          }
+
+	var input = document.getElementById("echoField");
+	var awesomplete = new Awesomplete(input, {
+		//list: ["Ada", "Java", "JavaScript", "Brainfuck", "LOLCODE", "Node.js", "Ruby on Rails"],
+		list: word_list,
+		filter: Awesomplete.FILTER_STARTSWITH
+	});
    
     d3.csv('data/XY.csv',function(csv){
     	csv.forEach(function(d){ d.X = +d.X; d.Y = +d.Y; })

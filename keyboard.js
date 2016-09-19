@@ -251,23 +251,6 @@ var Keyboard = function(){
     	
 
 
-
-
-    	
-		// foreignObject
-		// .attr("src", imagePath) 
-
-    	// key.on('mouseover',function(d){
-    		
-	    // 	d3.select(this)
-	    // 		.attr('data-original-title',mouseoverKeyText)
-	    // 		.attr('filter','none');
-	    // 		//.attr('fill-opacity','1')//.attr("border",1).style("stroke", 'black').style("stroke-width", 1)
-	    // 		//.attr( 'filter', 'url(#dropshadow)' )
-	    // 		//.transition()
-     // 			//.duration(100);
-	    // });
-
 	    key.on('mouseout',function(d){
 	    	d3.select(this)
 	    		//.attr('fill-opacity','0.8').attr("border",0).style("stroke", 'black').style("stroke-width", 0)
@@ -287,11 +270,14 @@ var Keyboard = function(){
 	    	else {
 	    		document.getElementById('echoField').value = document.getElementById('echoField').value + d.key.toLowerCase();	
 	    	}
+	    	document.getElementById('echoField').focus();
 
-	    	//document.getElementById('largeImg').src = path + d.key + state + "F.png";
-	    	//document.getElementById('largeImgPanel').style.display = 'block';
-	    	//document.getElementById('audiotag1').src = path + d.key + state + ".mp3";
-	    	//document.getElementById('audiotag1').play();
+	    	
+        	var pattern = document.getElementById('echoField').value;
+        	if (pattern !== "") {
+            	console.log(search(pattern));
+        	}
+
 	    	
 	    });
 
@@ -299,22 +285,49 @@ var Keyboard = function(){
 	    	d3.select(this)
 	    		.attr('transform','translate(0,0)')
 	    		.attr( 'filter', 'none' );
+	    	document.getElementById('echoField').focus();	
 	    });
 
-	    window.addEventListener("keydown", function (event) {
-  			if (event.defaultPrevented) {
-   				 return; // Should do nothing if the key event was already consumed.
-			}
-			//alert(keyCodes[event.keyCode]);
+	 //    window.addEventListener("keydown", function (event) {
+  // 			if (event.defaultPrevented) {
+  //  				 return; // Should do nothing if the key event was already consumed.
+		// 	}
+		// 	//alert(keyCodes[event.keyCode]);
 
-			// document.getElementById('largeImg').src = path + keyCodes[event.keyCode] + state + "F.png";
-	  //   	document.getElementById('largeImgPanel').style.display = 'block';
-	  //   	document.getElementById('audiotag1').src = path + keyCodes[event.keyCode] + state + ".mp3";
-	  //   	document.getElementById('audiotag1').play();
-			// Consume the event for suppressing "double action".
-			event.preventDefault();
-		}, true);
+		// 	// document.getElementById('largeImg').src = path + keyCodes[event.keyCode] + state + "F.png";
+	 //  //   	document.getElementById('largeImgPanel').style.display = 'block';
+	 //  //   	document.getElementById('audiotag1').src = path + keyCodes[event.keyCode] + state + ".mp3";
+	 //  //   	document.getElementById('audiotag1').play();
+		// 	// Consume the event for suppressing "double action".
+		// 	event.preventDefault();
+		// }, true);
+		var search=function(pattern) {
 
+	    	var i, len, k=0;
+	    	var len = word_list.length;
+	    	var possible_letters={};
+		    for (i = 0; i < len; i++) {
+		        
+		        var n = pattern.length;
+		        var text = word_list[i];
+		   
+		        if (text.toLowerCase().indexOf(pattern.toLowerCase()) === 0) {
+		            if(pattern.length!=text.length)
+		            {
+		            	var nextChar=text.charAt(pattern.length);
+		            	if (!(nextChar in possible_letters)){
+		            		possible_letters[nextChar]=1;
+		            	}
+		            	else{
+		            		possible_letters[nextChar]=possible_letters[nextChar]+1;
+		            	}
+		            }
+		        }
+
+		    }
+		    return possible_letters;
+   
+		}
 	    return kb;	
 	}
 
@@ -596,6 +609,8 @@ var Keyboard = function(){
 	function showLargeImagePanel() {
                 document.getElementById('largeImgPanel').style.display = 'block';
     }
+
+
 	return kb;
 
 }

@@ -12,6 +12,7 @@
         <link href="vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <!-- <link href="vendor/css/bootstrap-non-responsive.css" rel="stylesheet" type="text/css"> -->
         <link href="vendor/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="vendor/css/awesomplete.css">
         <!-- <link rel="stylesheet" href="vendor/css/bootstrap-sidebar.css"> -->
 
         <link href="style.css"  rel="stylesheet" type="text/css">
@@ -58,32 +59,13 @@
         
         <!-- Charts / Labels -->
         <div class ='TextBox'>
-            <textarea id="echoField" rows="7" cols="60" style="width: 1085px; height: 25px; font-family: Verdana, Arial, Helvetica, Geneva, Sans-Serif; font-size: 12px;" ></textarea> 
+            <input id="echoField" rows="7" cols="60" style="width: 1085px; height: 25px; font-family: Verdana, Arial, Helvetica, Geneva, Sans-Serif; font-size: 12px;" ></input> 
         </div>
 
-        <textarea rows="4" cols="50">
-            
-        </textarea>
+
 
         <div class='container'>
-        <!--    
-        <div class='row'>
-            <div class='col-xs-8 labels'>
-                <div class='labels'>
-                    <h1 class='title'><span contentEditable=true>Keyboard Acoustic Data </span></h1>
-                    
-                    <div>Wavelet transform plots for audio data from all keys. 
-                    <br/>In a given key plot, y-axis(log scale) corresponds to Frequency(Hz) and x-axis corresponds to Time(seconds).
-                 
-                    </div>
-                </div>
-            </div>
 
-            <div class='col-xs-1'></div>
-            <div class='col-xs-3'>
-            </div>
-        </div>
-        -->
              
             
             <div>
@@ -91,14 +73,6 @@
             <div id='keyboards'></div>
             </div>  
             
-            <!--
-            <div class='labels'>
-                    
-                    <p class='text-center' id="KBName"></p>
-            </div>
-            -->
-
-
 
             <hr/>
             <!-- <a id="KB-LayoutToggle">Show Keyboard Layout</a> -->
@@ -121,7 +95,7 @@
         <script src="vendor/js/jquery.min.js"></script>
         <script src="vendor/js/bootstrap.min.js"></script>
         <script src="vendor/js/bootstrap-multiselect.js"></script>
-        <script src="vendor/js/auto.standard.js"></script>
+        <script src="vendor/js/awesomplete.js"></script>
        
         <script src="vendor/js/d3.min.js"></script>
         <script src="vendor/js/d3.slider.js"></script>
