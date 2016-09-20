@@ -267,16 +267,29 @@ var Keyboard = function(){
 	    		var formFieldValue = document.getElementById('echoField').value;
       			document.getElementById('echoField').value = formFieldValue.substring(0, formFieldValue.length - 1); 
 	    	}
-	    	else {
+	    	else if(d.key=='Space'){
+	    		document.getElementById('echoField').value = document.getElementById('echoField').value + " ";
+	    	}
+	    	else{
 	    		document.getElementById('echoField').value = document.getElementById('echoField').value + d.key.toLowerCase();	
 	    	}
 	    	document.getElementById('echoField').focus();
 
-	    	
-        	var pattern = document.getElementById('echoField').value;
-        	if (pattern !== "") {
-            	console.log(search(pattern));
+	    	if (d.key!="Space"){
+	        	var pattern = document.getElementById('echoField').value;
+	        	pattern= (""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/).pop();
+	        	if (pattern !== "") {
+	            	
+	            	kb.update(filter_coords(all_coords,search(pattern)));
+	        	}
+
         	}
+
+        	else{
+        		console.log(all_coords);
+        		kb.update(all_coords);
+        	}
+
 
 	    	
 	    });
@@ -328,7 +341,31 @@ var Keyboard = function(){
 		    return possible_letters;
    
 		}
+
+		var filter_coords=function(coords,possible_letters)
+		{
+			var filtered_coords=[];
+			for (var i=0;i<coords.length;i++)
+			{
+				if (coords[i]["key"].toLowerCase() in possible_letters || coords[i]["key"].toLowerCase()=='space' || coords[i]["key"].toLowerCase()=='delete')
+				{
+					filtered_coords.push(coords[i]);
+				}
+			}
+			return filtered_coords;
+
+		}
+
+
 	    return kb;	
+	}
+
+	kb.update = function(coords){
+				console.log(coords);
+				d3.selectAll('#keyboards .kb-div').remove();
+				var kbLarge = new Keyboard()
+				.id(100).divId('All_Users')
+				.scale(4)('#keyboards',coords); 
 	}
 
 	kb.crossOutKeys = function(presentedKeys){
@@ -345,36 +382,7 @@ var Keyboard = function(){
 		else console.warning("You need to initialize the kb FIRST before crossing out the keys");
 		return kb;
 	}
-	kb.update = function(CurrentState){
-		//alert(CurrentState);
-		
-		if (state!=CurrentState){
-			state=CurrentState;
-			//return;
 
-			if(props.elemId){
-				// update which image to show here, depending on if up or down
-				var div = props.div;
-				div.select('svg').attr({
-						'width':props.kbWidth*props.scale+5,
-						'height':props.kbHeight*props.scale+5
-					});
-				var keys = div.selectAll('.key')
-				//.selectAll('rect')
-				.append('image')
-				.attr("preserveAspectRatio","none")
-				.attr('width',wKey)
-	    		.attr('height',hKey)
-	    		.attr('x',xKey)
-	    		.attr('y',yKey)
-	    		//.attr("xlink:href",imagePath)
-	    		//.attr("overflow","scroll")
-	    		
-	    		
-			}
-		}
-		return kb;
-	}
 
 	kb.pathUpdate = function(CurrentFolder){
 		//alert(CurrentState);

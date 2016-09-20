@@ -1,9 +1,10 @@
-    var word_list=[];
-    d3.csv("/data/words.csv", function(data) {
-  		data.forEach(function(d) {
-    	word_list.push(d["word"]);
-  		});
-	});
+var word_list=[];
+d3.csv("/data/words.csv", function(data) {
+		data.forEach(function(d) {
+	word_list.push(d["word"]);
+		});
+});
+var all_coords=[];
 
 (function(){
 
@@ -12,7 +13,7 @@
 	// event listeners: make this global so it's accessible by the heatmap and bars classes
 	  var dispatch = d3.dispatch("changeDisplayed");
 	  var dispatchKB= d3.dispatch("changeKB");
-    
+      var dispatchDynamicKB= d3.dispatch("changeDynamicKB");
  
     var kbCoords = [];
     var dataArr = []
@@ -56,11 +57,11 @@
 
 
 	var input = document.getElementById("echoField");
-	var awesomplete = new Awesomplete(input, {
-		//list: ["Ada", "Java", "JavaScript", "Brainfuck", "LOLCODE", "Node.js", "Ruby on Rails"],
-		list: word_list,
-		filter: Awesomplete.FILTER_STARTSWITH
-	});
+	// var awesomplete = new Awesomplete(input, {
+	// 	//list: ["Ada", "Java", "JavaScript", "Brainfuck", "LOLCODE", "Node.js", "Ruby on Rails"],
+	// 	list: word_list,
+	// 	filter: Awesomplete.FILTER_STARTSWITH
+	// });
    
     d3.csv('data/XY.csv',function(csv){
     	csv.forEach(function(d){ d.X = +d.X; d.Y = +d.Y; })
@@ -81,6 +82,7 @@
     		d.y = .5*(d.yMax + d.yMin);
     	});
     	//var keys = _.map(kbCoords,function(d){ return d.key; }); 
+    	all_coords=kbCoords;
     	plotFs.drawLegend();
     	plotFs.drawOpacityLegend();
 
@@ -149,9 +151,11 @@
   		changeKB(e,elem,d)
   	});
 
+
+
   	function changeDisplayed(e,elem,d){
   		if(!d) return;
-  		 //alert(d.label.toLowerCase());
+  		 
   		 
   		if(kbLarge){
   			
