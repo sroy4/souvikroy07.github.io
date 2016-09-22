@@ -236,7 +236,7 @@ var Keyboard = function(){
     		.attr('y',yKey)
     		.attr('fill','#FFAC7C')
     		.attr('fill-opacity','1')
-    		.attr( 'filter', 'url(#dropshadow)' )
+    		//.attr( 'filter', 'url(#dropshadow)' )
     		.classed('active',true);
 
     	
@@ -261,9 +261,9 @@ var Keyboard = function(){
 	    
 	    key.on('touchstart',function(d){
 
-			d3.select(this)
+				//d3.select(this)
 	    		//.attr('fill-opacity','0.8').attr("border",0).style("stroke", 'black').style("stroke-width", 0)
-	    		.attr('transform','translate(2,3)');
+	    		//.attr('transform','translate(2,3)');
 	    		//.attr( 'filter', 'url(#dropshadow2)' );
 	    	if (d.key=='Delete'){
 	    		var formFieldValue = document.getElementById('echoField').value;
@@ -296,12 +296,12 @@ var Keyboard = function(){
 	    	
 	    });
 
-	    key.on('mouseup',function(d){
-	    	d3.select(this)
-	    		.attr('transform','translate(0,0)')
-	    		.attr( 'filter', 'none' );
-	    	//document.getElementById('echoField').focus();	
-	    });
+	    // key.on('mouseup',function(d){
+	    // 	d3.select(this)
+	    // 		.attr('transform','translate(0,0)')
+	    // 		.attr( 'filter', 'none' );
+	    // 	//document.getElementById('echoField').focus();	
+	    // });
 
 	 //    window.addEventListener("keydown", function (event) {
   // 			if (event.defaultPrevented) {
