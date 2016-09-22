@@ -273,7 +273,7 @@ var Keyboard = function(){
 	    	else{
 	    		document.getElementById('echoField').value = document.getElementById('echoField').value + d.key.toLowerCase();	
 	    	}
-	    	document.getElementById('echoField').focus();
+	    	//document.getElementById('echoField').focus();
 
 	    	if (d.key!="Space"){
 	        	var pattern = document.getElementById('echoField').value;
