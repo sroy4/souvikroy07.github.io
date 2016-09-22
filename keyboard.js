@@ -273,7 +273,7 @@ var Keyboard = function(){
 	    	else{
 	    		document.getElementById('echoField').value = document.getElementById('echoField').value + d.key.toLowerCase();	
 	    	}
-	    	//document.getElementById('echoField').focus();
+	    	//document.getElementById('echoField').blur();
 
 	    	if (d.key!="Space"){
 	        	var pattern = document.getElementById('echoField').value;
@@ -298,7 +298,7 @@ var Keyboard = function(){
 	    	d3.select(this)
 	    		.attr('transform','translate(0,0)')
 	    		.attr( 'filter', 'none' );
-	    	document.getElementById('echoField').focus();	
+	    	//document.getElementById('echoField').focus();	
 	    });
 
 	 //    window.addEventListener("keydown", function (event) {
