@@ -259,7 +259,7 @@ var Keyboard = function(){
 	    		.attr( 'filter', 'none' );
 	    });
 	    
-	    key.on('mousedown',function(d){
+	    key.on('touchstart',function(d){
 
 			d3.select(this)
 	    		//.attr('fill-opacity','0.8').attr("border",0).style("stroke", 'black').style("stroke-width", 0)
