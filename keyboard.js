@@ -236,7 +236,9 @@ var Keyboard = function(){
     		.attr('y',yKey)
     		.attr('fill','#FFAC7C')
     		.attr('fill-opacity','1')
-    		.attr( 'filter', 'url(#dropshadow)' );
+    		.attr( 'filter', 'url(#dropshadow)' )
+    		.classed('active',true);
+
     	
     	key.append('text')
     		.text(mouseoverKeyText)
@@ -280,14 +282,14 @@ var Keyboard = function(){
 	        	pattern= (""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/).pop();
 	        	if (pattern !== "") {
 	            	
-	            	kb.update(filter_coords(all_coords,search(pattern)));
+	            	kb.update(search(pattern));
 	        	}
 
         	}
 
         	else{
-        		console.log(all_coords);
-        		kb.update(all_coords);
+        		
+        		kb.displayAll();
         	}
 
 
@@ -360,12 +362,35 @@ var Keyboard = function(){
 	    return kb;	
 	}
 
-	kb.update = function(coords){
-				console.log(coords);
-				d3.selectAll('#keyboards .kb-div').remove();
-				var kbLarge = new Keyboard()
-				.id(100).divId('All_Users')
-				.scale(4)('#keyboards',coords); 
+	kb.update = function(possible_letters){
+
+				// d3.selectAll('#keyboards .kb-div').remove();
+				// var kbLarge = new Keyboard()
+				// .id(100).divId('All_Users')
+				// .scale(4)('#keyboards',coords); 
+				var keys=props.div.select('svg').selectAll('.key');
+				
+				keys.classed('active', function(d,i){ 
+					if (!(d.key=='Space' || d.key=='Delete'))
+					{
+						if (!(d.key.toLowerCase() in possible_letters)){
+							d3.select(this).attr('display','none');
+							
+						}
+						else{
+							d3.select(this).attr('display','all');
+						}
+					}
+				});
+
+				
+	}
+
+	kb.displayAll = function(){
+
+				var keys=props.div.select('svg').selectAll('.key');
+				keys.attr('display','all');
+				
 	}
 
 	kb.crossOutKeys = function(presentedKeys){
