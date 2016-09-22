@@ -282,14 +282,16 @@ var Keyboard = function(){
 	        	pattern= (""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/).pop();
 	        	if (pattern !== "") {
 	            	
-	            	kb.update(search(pattern));
-	        	}
+	            	//kb.hideAndShow(search(pattern));
+	            	kb.redraw(filter_coords(all_coords,search(pattern)));
+		        	}
 
         	}
 
         	else{
         		
-        		kb.displayAll();
+        		//kb.displayAll();
+        		kb.redraw(all_coords);
         	}
 
 
@@ -303,19 +305,7 @@ var Keyboard = function(){
 	    // 	//document.getElementById('echoField').focus();	
 	    // });
 
-	 //    window.addEventListener("keydown", function (event) {
-  // 			if (event.defaultPrevented) {
-  //  				 return; // Should do nothing if the key event was already consumed.
-		// 	}
-		// 	//alert(keyCodes[event.keyCode]);
 
-		// 	// document.getElementById('largeImg').src = path + keyCodes[event.keyCode] + state + "F.png";
-	 //  //   	document.getElementById('largeImgPanel').style.display = 'block';
-	 //  //   	document.getElementById('audiotag1').src = path + keyCodes[event.keyCode] + state + ".mp3";
-	 //  //   	document.getElementById('audiotag1').play();
-		// 	// Consume the event for suppressing "double action".
-		// 	event.preventDefault();
-		// }, true);
 		var search=function(pattern) {
 
 	    	var i, len, k=0;
@@ -362,12 +352,8 @@ var Keyboard = function(){
 	    return kb;	
 	}
 
-	kb.update = function(possible_letters){
+	kb.hideAndShow = function(possible_letters){
 
-				// d3.selectAll('#keyboards .kb-div').remove();
-				// var kbLarge = new Keyboard()
-				// .id(100).divId('All_Users')
-				// .scale(4)('#keyboards',coords); 
 				var keys=props.div.select('svg').selectAll('.key');
 				
 				keys.classed('active', function(d,i){ 
@@ -382,7 +368,14 @@ var Keyboard = function(){
 						}
 					}
 				});
+				
+	}
+	kb.redraw = function(coords){
 
+				d3.selectAll('#keyboards .kb-div').remove();
+				var kbLarge = new Keyboard()
+				.id(100).divId('All_Users')
+				.scale(4)('#keyboards',coords); 
 				
 	}
 
