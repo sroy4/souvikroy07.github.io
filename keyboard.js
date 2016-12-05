@@ -137,6 +137,8 @@ var Keyboard = function(){
 	};
 	"use strict";
 	
+
+
 	var state="down";
 	var props = {
 		kbHeight:100
@@ -146,6 +148,9 @@ var Keyboard = function(){
 	};
 
 	function kb(elemId,coords){
+
+
+		
 		props.elemId = elemId +' .kb-div';
 		props.coords = coords;
 		var div = d3.select(elemId)
@@ -259,7 +264,8 @@ var Keyboard = function(){
 	    		.attr( 'filter', 'none' );
 	    });
 	    
-	    key.on('touchstart',function(d){
+	    //key.on('touchstart',function(d){
+	   	key.on('mousedown',function(d){
 
 				//d3.select(this)
 	    		//.attr('fill-opacity','0.8').attr("border",0).style("stroke", 'black').style("stroke-width", 0)
@@ -279,11 +285,13 @@ var Keyboard = function(){
 
 	    	if (d.key!="Space"){
 	        	var pattern = document.getElementById('echoField').value;
+	        	
 	        	pattern= (""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/).pop();
 	        	if (pattern !== "") {
 	            	
 	            	//kb.hideAndShow(search(pattern));
-	            	kb.redraw(filter_coords(all_coords,search(pattern)));
+	            	//kb.redraw(filter_coords(all_coords,search(pattern)));
+	            	kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(search(pattern)))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),0));
 		        	}
 
         	}
@@ -291,7 +299,17 @@ var Keyboard = function(){
         	else{
         		
         		//kb.displayAll();
-        		kb.redraw(all_coords);
+        		var pattern = document.getElementById('echoField').value;
+        		var text=(""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/);
+        		// text=text[text.length-1];
+        		// var o_t,s_t1, s_t2,max_index;
+        		// [o_t, s_t1, s_t2,max_index]=forward_prop_step_np(parseInt(word_to_index[text]), math.zeros(128,1), math.zeros(128,1));
+        		// console.log(max_index);
+        		document.getElementById('Predict').value=predict(text);
+        		//console.log(all_letters);
+        		kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(all_letters))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),1));
+        		
+        		//kb.redraw(all_coords);
         	}
 
 
@@ -321,10 +339,10 @@ var Keyboard = function(){
 		            {
 		            	var nextChar=text.charAt(pattern.length);
 		            	if (!(nextChar in possible_letters)){
-		            		possible_letters[nextChar]=1;
+		            		possible_letters[nextChar.toLowerCase()]=1;
 		            	}
 		            	else{
-		            		possible_letters[nextChar]=possible_letters[nextChar]+1;
+		            		possible_letters[nextChar.toLowerCase()]=possible_letters[nextChar]+1;
 		            	}
 		            }
 		        }
@@ -334,16 +352,170 @@ var Keyboard = function(){
    
 		}
 
-		var filter_coords=function(coords,possible_letters)
+		var filter_coords=function(coords,possible_letters,coordsMap,neighborMap,flag)
 		{
 			var filtered_coords=[];
+
+
+
+			if (flag){
+				filtered_coords=coords;
+				return filtered_coords;
+			}
+
+			else{
+
 			for (var i=0;i<coords.length;i++)
 			{
-				if (coords[i]["key"].toLowerCase() in possible_letters || coords[i]["key"].toLowerCase()=='space' || coords[i]["key"].toLowerCase()=='delete')
-				{
+				if (coords[i]["key"].toLowerCase() in possible_letters || coords[i]["key"].toLowerCase()=='space' || coords[i]["key"].toLowerCase()=='delete' || coords[i]["key"].toLowerCase()=='capslock')
+				{	
+					
 					filtered_coords.push(coords[i]);
 				}
 			}
+
+			}
+			//console.log(coords);
+			//console.log(coordsMap);
+			for (var i=0;i<filtered_coords.length;i++)
+			{
+				if (!(filtered_coords[i]["key"].toLowerCase()=='space' || filtered_coords[i]["key"].toLowerCase()=='delete' || filtered_coords[i]["key"].toLowerCase()=='capslock')){
+						var currentKey=filtered_coords[i]["key"];
+						
+						if (currentKey in neighborMap){
+						
+							var left_neighbor=neighborMap[currentKey][0];
+							var right_neighbor=neighborMap[currentKey][1];
+							var up_neighbor=neighborMap[currentKey][2];
+							var down_neighbor=neighborMap[currentKey][3];
+
+				
+
+						if (!(left_neighbor.toLowerCase() in possible_letters)){
+								var left_neighbor_neighbour=neighborMap[left_neighbor][0];
+								filtered_coords[i]['xMin']=coordsMap[left_neighbor]['xMin'];
+								//filtered_coords[i]['xMax']=coordsMap[currentKey]['xMax'];
+								filtered_coords[i]['x']=.5*(coordsMap[left_neighbor]['xMin']+filtered_coords[i]['xMax']);
+								filtered_coords[i]['w']=filtered_coords[i]['w']+coordsMap[left_neighbor]['w'];
+								neighborMap[currentKey][0]=left_neighbor_neighbour;
+								if (!(left_neighbor_neighbour=='None')){
+									neighborMap[left_neighbor_neighbour][1]=currentKey;
+								}
+								
+								
+								
+						}
+
+
+						if (!(right_neighbor.toLowerCase() in possible_letters)){
+									
+								var right_neighbor_neighbour=neighborMap[right_neighbor][1];
+								
+
+								//filtered_coords[i]['xMin']=coordsMap[currentKey]['xMin'];
+								filtered_coords[i]['xMax']=coordsMap[right_neighbor]['xMax'];
+								filtered_coords[i]['x']=.5*(coordsMap[right_neighbor]['xMax']+filtered_coords[i]['xMin']);
+								filtered_coords[i]['w']=filtered_coords[i]['w']+coordsMap[right_neighbor]['w'];
+								neighborMap[currentKey][1]=right_neighbor_neighbour;
+								neighborMap[right_neighbor_neighbour][0]=currentKey;
+								
+							
+
+						}
+
+						
+
+						else if ((left_neighbor.toLowerCase() in possible_letters) && (right_neighbor.toLowerCase() in possible_letters)){
+					
+							filtered_coords[i]['xMin']=coordsMap[currentKey]['xMin'];
+							filtered_coords[i]['xMax']=coordsMap[currentKey]['xMax'];
+							filtered_coords[i]['x']=.5*(coordsMap[currentKey]['xMin']+coordsMap[currentKey]['xMax']);
+							filtered_coords[i]['w']=coordsMap[currentKey]['w'];
+
+						}	
+
+						
+
+
+					}
+				
+
+			}
+
+		}
+
+		
+
+		for (var i=0;i<filtered_coords.length;i++)
+			{
+				if (!(filtered_coords[i]["key"].toLowerCase()=='space' || filtered_coords[i]["key"].toLowerCase()=='delete')){
+						var currentKey=filtered_coords[i]["key"];
+						//console.log(currentKey);
+						if (currentKey in neighborMap){
+						//if (currentKey == 'R'){
+							var left_neighbor=neighborMap[currentKey][0];
+							var right_neighbor=neighborMap[currentKey][1];
+							var up_neighbor=neighborMap[currentKey][2];
+							var down_neighbor=neighborMap[currentKey][3];
+							
+					
+
+						if (!(down_neighbor=='None'))
+						{
+						var left_corner_neighbor=neighborMap[down_neighbor][0];
+						var right_corner_neighbor=neighborMap[down_neighbor][1];
+						
+						if ((!(down_neighbor.toLowerCase() in possible_letters)) && (!(left_corner_neighbor.toLowerCase() in possible_letters)) && (!(right_corner_neighbor.toLowerCase() in possible_letters))){
+								filtered_coords[i]['yMin']=coordsMap[down_neighbor]['yMin'];
+								//filtered_coords[i]['xMax']=coordsMap[currentKey]['xMax'];
+								filtered_coords[i]['y']=.5*(coordsMap[down_neighbor]['yMin']+filtered_coords[i]['yMax']);
+								filtered_coords[i]['h']=filtered_coords[i]['h']+coordsMap[down_neighbor]['h'];
+								//possible_letters[down_neighbor.toLowerCase()]=1;
+
+								
+						}
+						}
+
+						// if (!(up_neighbor.toLowerCase() in possible_letters)){
+									
+						// 		//var right_neighbor_neighbour=neighborMap[right_neighbor][1];
+								
+
+						// 		//filtered_coords[i]['xMin']=coordsMap[currentKey]['xMin'];
+						// 		filtered_coords[i]['yMax']=coordsMap[up_neighbor]['yMax'];
+						// 		filtered_coords[i]['y']=.5*(coordsMap[up_neighbor]['yMax']+filtered_coords[i]['yMin']);
+						// 		filtered_coords[i]['h']=filtered_coords[i]['h']+coordsMap[up_neighbor]['h'];
+						// 		possible_letters[up_neighbor.toLowerCase()]=1;
+							
+
+						// }
+
+						
+
+						else if ((down_neighbor.toLowerCase() in possible_letters) && (up_neighbor.toLowerCase() in possible_letters)){
+					
+							filtered_coords[i]['yMin']=coordsMap[currentKey]['yMin'];
+							filtered_coords[i]['yMax']=coordsMap[currentKey]['yMax'];
+							filtered_coords[i]['y']=.5*(coordsMap[currentKey]['yMin']+coordsMap[currentKey]['yMax']);
+							filtered_coords[i]['h']=coordsMap[currentKey]['h'];
+
+						}	
+
+						
+
+
+					}
+				
+
+			}
+
+		}
+
+
+
+
+
+
 			return filtered_coords;
 
 		}
@@ -486,8 +658,6 @@ var Keyboard = function(){
   		return (100-d.yMax) * props.scale; 
   	}
   	function xText(d){ 
-
-  		//console.log((d.xMin+(d.w/2)));
   		return (d.xMin+(d.w/2))* props.scale; 
   	}
   	function yText(d){

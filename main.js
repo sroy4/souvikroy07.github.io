@@ -1,11 +1,163 @@
 var word_list=[];
+var word_to_index={};
+var index_to_word=[];
+np=numpy;
 d3.csv("/data/words.csv", function(data) {
 		data.forEach(function(d) {
 	word_list.push(d["word"]);
 		});
 });
-var all_coords=[];
+d3.csv("/data/word_to_index.csv", function(data) {
+		word_to_index=data[0];
+});
+Papa.parse("data/index_to_word.csv", {download:true,complete: function(data)
+	{
+		index_to_word=data['data'][0];
+	}});
+var E;
+var V;
+var b;
+var c;
+var W0;
+var W1;
+var W2;
+var W3;
+var W4;
+var W5;
+var U0;
+var U1;
+var U2;
+var U3;
+var U4;
+var U5;
+var flag1=0;
+var flag2=0;
 
+Papa.parse("data/E.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		E=data['data'].slice(0,l);
+		E=math.matrix(E);
+		//console.log(E.shape);
+		
+		flag1=1;
+	}});
+Papa.parse("data/c.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		c=data['data'].slice(0,l);
+		//c=numpy.array(c);
+		c=math.matrix(c);
+		flag2=1;
+	}});
+Papa.parse("data/V.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		V=data['data'].slice(0,l);
+		V=math.matrix(V);
+	}});
+Papa.parse("data/b.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		b=data['data'].slice(0,l);
+		b=math.matrix(b);
+		b=math.transpose(b);
+	}});
+
+Papa.parse("data/W0.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		W0=data['data'].slice(0,l);
+		W0=math.matrix(W0);
+	}});
+Papa.parse("data/W1.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		W1=data['data'].slice(0,l);
+		W1=math.matrix(W1);
+	}});
+Papa.parse("data/W2.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		W2=data['data'].slice(0,l);
+		W2=math.matrix(W2);
+	}});
+Papa.parse("data/W3.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		W3=data['data'].slice(0,l);
+		W3=math.matrix(W3);
+	}});
+Papa.parse("data/W4.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		W4=data['data'].slice(0,l);
+		W4=math.matrix(W4);
+	}});
+Papa.parse("data/W5.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		W5=data['data'].slice(0,l);
+		W5=math.matrix(W5);
+	}});
+Papa.parse("./data/U0.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		U0=data['data'].slice(0,l);
+		U0=math.matrix(U0);
+		
+	}});
+Papa.parse("data/U1.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		U1=data['data'].slice(0,l);
+		U1=math.matrix(U1);
+	}});
+Papa.parse("data/U2.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		U2=data['data'].slice(0,l);
+		U2=math.matrix(U2);
+	}});
+Papa.parse("data/U3.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		U3=data['data'].slice(0,l);
+		U3=math.matrix(U3);
+	}});
+Papa.parse("data/U4.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		U4=data['data'].slice(0,l);
+		U4=math.matrix(U4);
+	}});
+Papa.parse("data/U5.csv", {download:true, dynamicTyping: true,complete: function(data)
+	{
+		// executed after all files are complete
+		var l=data['data'].length-1
+		U5=data['data'].slice(0,l);
+		U5=math.matrix(U5);
+	}});
+
+var all_coords=[];
+var neighborMap={};
+var coordsMap={};
+var all_letters={};
 (function(){
 
 	"use strict";
@@ -83,6 +235,137 @@ var all_coords=[];
     	});
     	//var keys = _.map(kbCoords,function(d){ return d.key; }); 
     	all_coords=kbCoords;
+    	for (var count=15;count<27;count++){
+			var neighborArray=[];
+			
+			neighborArray.push(kbCoords[count-1]['key']);
+			neighborArray.push(kbCoords[count+1]['key']);
+			neighborArray.push(kbCoords[count-14]['key']);
+			neighborArray.push(kbCoords[count+14]['key']);
+			neighborMap[kbCoords[count]['key']]=neighborArray;
+			all_letters[kbCoords[count]['key'].toLowerCase()]=1;
+		}
+		for (var count=29;count<40;count++){
+			var neighborArray=[];
+			neighborArray.push(kbCoords[count-1]['key']);
+			neighborArray.push(kbCoords[count+1]['key']);
+			neighborArray.push(kbCoords[count-14]['key']);
+			neighborArray.push(kbCoords[count+13]['key']);
+			neighborMap[kbCoords[count]['key']]=neighborArray;
+			all_letters[kbCoords[count]['key'].toLowerCase()]=1;
+		}
+		for (var count=42;count<51;count++){
+			var neighborArray=[];
+			neighborArray.push(kbCoords[count-1]['key']);
+			neighborArray.push(kbCoords[count+1]['key']);
+			neighborArray.push(kbCoords[count-13]['key']);
+			//neighborArray.push(kbCoords[count+13]['key']);
+			neighborArray.push('None');
+			neighborMap[kbCoords[count]['key']]=neighborArray;
+			all_letters[kbCoords[count]['key'].toLowerCase()]=1;
+		}
+		// neighborMap['V'][3]='Space';
+		// neighborMap['B'][3]='Space';
+		// neighborMap['N'][3]='Space';
+		// neighborMap['M'][3]='Space';
+
+		neighborMap['Tab']=['A','A','A','A'];
+		neighborMap['Tab'][0]='None';
+		neighborMap['Tab'][1]='Q';
+		neighborMap['Tab'][2]='Tilde';
+		neighborMap['Tab'][3]='CapsLock';
+		
+		neighborMap['CapsLock']=['A','A','A','A'];
+		neighborMap['CapsLock'][0]='None';
+		neighborMap['CapsLock'][1]='A';
+		neighborMap['CapsLock'][2]='Tab';
+		neighborMap['CapsLock'][3]='LeftShift';
+
+		neighborMap['LeftShift']=['A','A','A','A'];
+		neighborMap['LeftShift'][0]='None';
+		neighborMap['LeftShift'][1]='Z';
+		neighborMap['LeftShift'][2]='CapsLock';
+		neighborMap['LeftShift'][3]='Fn';
+
+
+		//console.log(neighborMap);
+		// var dict={};
+		// for (var count=15;count<25;count++){
+		// 	var neighborArray=[];
+			
+		// 	dict[kbCoords[count-1]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	dict[kbCoords[count+1]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	dict[kbCoords[count-14]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	dict[kbCoords[count+14]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	neighborMap[kbCoords[count]['key']]=neighborArray;
+		// 	all_letters[kbCoords[count]['key'].toLowerCase()]=1;
+		// }
+		// for (var count=29;count<38;count++){
+		// 	var neighborArray=[];
+		// 	dict[kbCoords[count-1]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	dict[kbCoords[count+1]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	dict[kbCoords[count-14]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	dict[kbCoords[count+13]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	neighborMap[kbCoords[count]['key']]=neighborArray;
+		// 	all_letters[kbCoords[count]['key'].toLowerCase()]=1;
+		// }
+		// for (var count=42;count<49;count++){
+		// 	var neighborArray=[];
+		// 	dict[kbCoords[count-1]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	dict[kbCoords[count+1]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	dict[kbCoords[count-13]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	dict[kbCoords[count+13]['key']]=1;
+		// 	neighborArray.push(dict);
+		// 	dict={};
+		// 	neighborMap[kbCoords[count]['key']]=neighborArray;
+		// 	all_letters[kbCoords[count]['key'].toLowerCase()]=1;
+		// }
+		// neighborMap['V'][3]='Space';
+		// neighborMap['B'][3]='Space';
+		// neighborMap['N'][3]='Space';
+		// neighborMap['M'][3]='Space';
+
+		for (var count=0;count<kbCoords.length;count++){
+			var parameterMap={};
+
+			parameterMap['x']=kbCoords[count]['x'];
+			parameterMap['y']=kbCoords[count]['y'];
+			parameterMap['xMax']=kbCoords[count]['xMax'];
+			parameterMap['xMin']=kbCoords[count]['xMin'];
+			parameterMap['yMax']=kbCoords[count]['yMax'];
+			parameterMap['yMin']=kbCoords[count]['yMin'];
+			parameterMap['w']=kbCoords[count]['w'];
+			parameterMap['h']=kbCoords[count]['h'];
+			coordsMap[kbCoords[count]['key']]=parameterMap;
+			if (!(kbCoords[count]['key'].toLowerCase() in all_letters)){
+				all_letters[kbCoords[count]['key']]=1;
+			}
+
+		}
+
+
     	plotFs.drawLegend();
     	plotFs.drawOpacityLegend();
 
@@ -90,7 +373,15 @@ var all_coords=[];
 		initDisplayFolderButtons('#navbar-show-folder-links .chart-dropdown');
 		changeDisplayed(null,0,{label:rateElems[1],id:1})
 		
+
 		if(quickLoad) quickLoadData();
+
+		setTimeout(function(){
+			console.log("Ready!")
+
+		}, 10000);
+		
+		
    
     });
 
@@ -594,5 +885,86 @@ Object.size = function(obj) {
     return size;
 };
 
+//predict
 
+function forward_prop_step_np(x_t, s_t1_prev, s_t2_prev){
 
+            
+
+            var x_e=math.subset(E,math.index(math.range(0,128),x_t));
+            z_t1 = math.add(math.multiply(U0,x_e),math.multiply(W0,s_t1_prev));
+            z_t1 = math.add(z_t1,math.subset(b,math.index(math.range(0,128),0)));
+            z_t1=  math.dotDivide(math.ones(math.size(z_t1)),math.add(math.exp(math.unaryMinus(z_t1)),1));
+            //console.log(z_t1);
+            
+            r_t1= math.add(math.multiply(U1,x_e),math.multiply(W1,s_t1_prev));
+            r_t1= math.add(r_t1,math.subset(b,math.index(math.range(0,128),1)));
+            r_t1=  math.dotDivide(math.ones(math.size(r_t1)),math.add(math.exp(math.unaryMinus(r_t1)),1));
+            //console.log(r_t1);
+
+            c_t1=math.add(math.multiply(U2,x_e),math.multiply(W2,math.dotMultiply(s_t1_prev,r_t1)));
+            c_t1= math.add(c_t1,math.subset(b,math.index(math.range(0,128),2)));
+            c_t1=math.tanh(c_t1);
+            //console.log(c_t1);
+
+            s_t1=math.add(math.dotMultiply(math.subtract(math.ones(math.size(z_t1)),z_t1),c_t1),math.dotMultiply(z_t1,s_t1_prev));
+            //console.log(s_t1);
+            
+            
+            z_t2 = math.add(math.multiply(U3,s_t1),math.multiply(W3,s_t2_prev));
+            z_t2 = math.add(z_t2,math.subset(b,math.index(math.range(0,128),3)));
+            z_t2=  math.dotDivide(math.ones(math.size(z_t2)),math.add(math.exp(math.unaryMinus(z_t2)),1));
+            //console.log(z_t2);
+            r_t2= math.add(math.multiply(U4,s_t1),math.multiply(W4,s_t2_prev));
+            r_t2= math.add(r_t2,math.subset(b,math.index(math.range(0,128),4)));
+            r_t2=  math.dotDivide(math.ones(math.size(r_t2)),math.add(math.exp(math.unaryMinus(r_t2)),1));
+
+            //console.log(r_t2);
+            c_t2=math.add(math.multiply(U5,s_t1),math.multiply(W5,math.dotMultiply(s_t2_prev,r_t2)));
+            c_t2= math.add(c_t2,math.subset(b,math.index(math.range(0,128),5)));
+            c_t2=math.tanh(c_t2);
+            //console.log(c_t2);
+            s_t2=math.add(math.dotMultiply(math.subtract(math.ones(math.size(z_t2)),z_t2),c_t2),math.dotMultiply(z_t2,s_t2_prev));
+            //console.log(s_t2);
+            o_t = math.add(math.multiply(V,s_t2),c);
+
+            sum=math.sum(math.exp(o_t));
+            o_t=math.divide(math.exp(o_t),sum);
+            //console.log(o_t);
+            var max=0;
+            var max_index;
+            o_t.forEach(function (value, index, matrix) {
+            	if (value>max){
+            		max=value;
+            		max_index=index;
+            	}
+  				
+			});
+			//console.log(max_index);
+            return [o_t, s_t1, s_t2,max_index[0]];
+}
+
+function predict(text){
+	var T=text.length;
+	var s_t1=math.zeros(128,1);
+	var s_t2=math.zeros(128,1);
+	var o_t,s_t1, s_t2,max_index;
+	if (T>5){
+		T=5;
+	}
+	
+	var text2=text.slice(text.length-T,text.length);
+	
+	for (var t=0;t<T;t++){
+		if (text2[t] in word_to_index){
+			var x_t=parseInt(word_to_index[text2[t]]);
+			[o_t, s_t1, s_t2,max_index]=forward_prop_step_np(x_t, s_t1, s_t2);
+		}
+	}
+	return index_to_word[max_index];
+}
+
+function accept(){
+
+	document.getElementById('echoField').value=document.getElementById('echoField').value+document.getElementById('Predict').value;
+}
