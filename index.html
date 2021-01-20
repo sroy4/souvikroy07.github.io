@@ -3,57 +3,80 @@
     <head>
         <meta charset="utf-8">
         <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+         
+         
+        <div style="text-align: center; color: #6C6C6C; font-size: 32px; font-weight: lighter; font-family: "Computer Modern Sans", sans-serif;">
+            <p>Smart Keyboard</p>
+            
+        </div>
+
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+        <div style="margin:auto;text-align: center; color: #6C6C6C; width: 900px; height: 100px; ">
+            <p>The Smart Keyboard optimizes its key size dynamically based on the user input. Letters which don't appear in the dictionary after the sequence of letters currently typed are removed from the keyboard. The rest of letters are magnified in size according to the space available, helping users type faster with fewer errors. It also has contextual predictive capabilities using a neural network. The next most probable word based on past user inputs is suggested. Start typing into the box below by clicking/touching the approptiate key.</p>
+        </div>
         <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=0.8, user-scalable=0">
 
 
       
 
-        <!-- <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
-        <link href="vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <!-- <link href="vendor/css/bootstrap-non-responsive.css" rel="stylesheet" type="text/css"> -->
-        <link href="vendor/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="vendor/css/awesomplete.css">
-        <!-- <link rel="stylesheet" href="vendor/css/bootstrap-sidebar.css"> -->
-
-        <link href="style.css"  rel="stylesheet" type="text/css">
-
         
- 
+        <!-- <link rel="stylesheet" href="fonts/Serif/cmun-serif.css"  > -->
+<!--         <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">
+ -->
+
     </head>
 
     <body>
 
         <!-- If you want a fixed header  -->
 
-
    
         
         <!-- Charts / Labels -->
-        <div class ='TextBox'>
-            <input id="echoField" rows="7" cols="60" style="width: 1085px; height: 25px; font-family: Verdana, Arial, Helvetica, Geneva, Sans-Serif; font-size: 12px;" ></input> 
+        <div class ='TextBox' >
+            <input id="echoField" rows="7" cols="60" style="width: 900px; height: 75px; font-family: Verdana, Arial, Helvetica, Geneva, Sans-Serif; font-size: 12px;" ></input> 
         </div>
 
-        <div class ='TextBox'>
+        <div class ='TextBox' style="text-align: left" id="Suggested Word">
+            <p>Suggested Word</p>
             <input id="Predict" rows="7" cols="60" style="width: 500px; height: 25px; font-family: Verdana, Arial, Helvetica, Geneva, Sans-Serif; font-size: 12px;" ></input> 
         </div>
 
-        <div class="form-group">
-              <label class="col-md-4 control-label"></label>
-              <div class="col-md-4">
-                <button onclick="accept()" class="btn btn-warning" >Accept</button>
-              </div>
+        <div id="Wrapper">
+            <button onclick="accept()" id="Accept" class="btn btn-warning">Accept</button>
+            
         </div>
+        
+
+        <form>
+              <fieldset class="form-group">
+              <div class="form-group" >
+                 
+                 <label for="cb"><input id="cb" type="checkbox" onchange="handleClick()" checked data-toggle="toggle">Prediction
+                 </label>
+                 
+              </div>
+              </fieldset>
+              <span style="display: inline;">
+              <button type="submit" class="btn btn-primary" id="Bt" style="visibility:hidden">Submit</button>
+              </span>
+        </form>
+
 
         <div class='container'>
-
-             
-            
-            <div>
+                  
+        
+        <div>
             <div id='keyboards-large'></div>
             <div id='keyboards'></div>
-            </div>  
+        </div>  
             
 
+        <link href="style.css"  rel="stylesheet" >
+        <link href="vendor/css/bootstrap.min.css" rel="stylesheet" >
+        <link href="vendor/css/bootstrapValidator.css" rel="stylesheet">
+        <link href="vendor/css/bootstrap-multiselect.css" rel="stylesheet" >
+        <link href="vendor/css/bootstrap-toggle.min.css" rel="stylesheet">
 
 
         <script src="vendor/js/jquery.min.js"></script>
@@ -70,6 +93,8 @@
         <script src="vendor/js/PolySolve.js"></script>
         <script src="vendor/js/Scipy.js"></script>
         <script src="vendor/js/math.js"></script>
+        <script src="vendor/js//bootstrap-toggle.min.js"></script>
+        <script src="vendor/js/bootstrapValidator.js"></script>
         <!-- mine -->
         <script src="keyboard.js"></script>
         <script src="main.js"></script>

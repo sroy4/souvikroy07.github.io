@@ -138,7 +138,7 @@ var Keyboard = function(){
 	"use strict";
 	
 
-
+	exceptions={"delete" : 1 ,"space" : 1 , "semicolon" : 1, "backslash" : 1, "quote" : 1 , "comma" : 1, "period" :1 ,"question": 1,"leftshift" : 1, "rightshift" : 1 , "return" :1};
 	var state="down";
 	var props = {
 		kbHeight:100
@@ -265,8 +265,10 @@ var Keyboard = function(){
 	    });
 	    
 	    //key.on('touchstart',function(d){
-	   	key.on('mousedown',function(d){
-
+	    if (isMobile.iOS()){
+	    key.on('touchstart',function(d){
+	   	
+	    		ws.send(d.key.toLowerCase());
 				//d3.select(this)
 	    		//.attr('fill-opacity','0.8').attr("border",0).style("stroke", 'black').style("stroke-width", 0)
 	    		//.attr('transform','translate(2,3)');
@@ -274,17 +276,46 @@ var Keyboard = function(){
 	    	if (d.key=='Delete'){
 	    		var formFieldValue = document.getElementById('echoField').value;
       			document.getElementById('echoField').value = formFieldValue.substring(0, formFieldValue.length - 1); 
+      			var pattern = document.getElementById('echoField').value.toLowerCase();
+	        	
+	        	pattern= (""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/).pop();
+	        	if (pattern !== "") {
+	            	
+	            	//kb.hideAndShow(search(pattern));
+	            	//kb.redraw(filter_coords(all_coords,search(pattern)));
+        			kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(all_letters))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),1));
+		        	}
+
 	    	}
 	    	else if(d.key=='Space'){
 	    		document.getElementById('echoField').value = document.getElementById('echoField').value + " ";
+
+        		//kb.displayAll();
+        		var pattern = document.getElementById('echoField').value.toLowerCase();
+        		var text=(""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/);
+        		// text=text[text.length-1];
+        		// var o_t,s_t1, s_t2,max_index;
+        		// [o_t, s_t1, s_t2,max_index]=forward_prop_step_np(parseInt(word_to_index[text]), math.zeros(128,1), math.zeros(128,1));
+        		// console.log(max_index);
+        		if(predictOn){
+	        		var predicted= predict(text);
+	        		if (predicted!='UNKNOWN_TOKEN'){
+	        			document.getElementById('Predict').value=predicted;
+	        		}
+        		}
+        		//console.log(all_letters);
+        		kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(all_letters))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),1));
+        		
+	    	}
+	    	else if(d.key=='LeftShift' || d.key=="RightShift"){
+	    		console.log('Here');
+	    		capsOn=!capsOn;
+	    		kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(all_letters))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),1));
+
 	    	}
 	    	else{
-	    		document.getElementById('echoField').value = document.getElementById('echoField').value + d.key.toLowerCase();	
-	    	}
-	    	//document.getElementById('echoField').blur();
-
-	    	if (d.key!="Space"){
-	        	var pattern = document.getElementById('echoField').value;
+	    		document.getElementById('echoField').value = document.getElementById('echoField').value + showKey(d.key);	
+	    		var pattern = document.getElementById('echoField').value.toLowerCase();
 	        	
 	        	pattern= (""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/).pop();
 	        	if (pattern !== "") {
@@ -294,28 +325,77 @@ var Keyboard = function(){
 	            	kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(search(pattern)))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),0));
 		        	}
 
-        	}
+	    	}
 
-        	else{
-        		
+	    	
+	    });
+	   }
+	   else{
+	   key.on('mousedown',function(d){
+	   		//console.log(d.key);
+	   			ws.send(d.key.toLowerCase());
+				//d3.select(this)
+	    		//.attr('fill-opacity','0.8').attr("border",0).style("stroke", 'black').style("stroke-width", 0)
+	    		//.attr('transform','translate(2,3)');
+	    		//.attr( 'filter', 'url(#dropshadow2)' );
+	    	if (d.key=='Delete'){
+	    		var formFieldValue = document.getElementById('echoField').value;
+      			document.getElementById('echoField').value = formFieldValue.substring(0, formFieldValue.length - 1); 
+      			var pattern = document.getElementById('echoField').value.toLowerCase();
+	        	
+	        	pattern= (""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/).pop();
+	        	if (pattern !== "") {
+	            	
+	            	//kb.hideAndShow(search(pattern));
+	            	//kb.redraw(filter_coords(all_coords,search(pattern)));
+        			kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(all_letters))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),1));
+		        	}
+
+	    	}
+	    	else if(d.key=='Space'){
+	    		document.getElementById('echoField').value = document.getElementById('echoField').value + " ";
+
         		//kb.displayAll();
-        		var pattern = document.getElementById('echoField').value;
+        		var pattern = document.getElementById('echoField').value.toLowerCase();
         		var text=(""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/);
         		// text=text[text.length-1];
         		// var o_t,s_t1, s_t2,max_index;
         		// [o_t, s_t1, s_t2,max_index]=forward_prop_step_np(parseInt(word_to_index[text]), math.zeros(128,1), math.zeros(128,1));
         		// console.log(max_index);
-        		document.getElementById('Predict').value=predict(text);
+        		if(predictOn){
+	        		var predicted= predict(text);
+	        		if (predicted!='UNKNOWN_TOKEN'){
+	        			document.getElementById('Predict').value=predicted;
+	        		}
+        		}
         		//console.log(all_letters);
         		kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(all_letters))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),1));
         		
-        		//kb.redraw(all_coords);
-        	}
+	    	}
+	    	else if(d.key=='LeftShift' || d.key=="RightShift"){
+	    		console.log('Here');
+	    		capsOn=!capsOn;
+	    		kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(all_letters))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),1));
 
+	    	}
+	    	else{
+	    		document.getElementById('echoField').value = document.getElementById('echoField').value + showKey(d.key);	
+	    		var pattern = document.getElementById('echoField').value.toLowerCase();
+	        	
+	        	pattern= (""+pattern).replace(/[\s-]+$/,'').split(/[\s-]/).pop();
+	        	if (pattern !== "") {
+	            	
+	            	//kb.hideAndShow(search(pattern));
+	            	//kb.redraw(filter_coords(all_coords,search(pattern)));
+	            	kb.redraw(filter_coords((JSON.parse(JSON.stringify(all_coords))),(JSON.parse(JSON.stringify(search(pattern)))),(JSON.parse(JSON.stringify(coordsMap))),(JSON.parse(JSON.stringify(neighborMap))),0));
+		        	}
 
+	    	}
+	    	//document.getElementById('echoField').blur();
 	    	
 	    });
 
+	   }
 	    // key.on('mouseup',function(d){
 	    // 	d3.select(this)
 	    // 		.attr('transform','translate(0,0)')
@@ -352,11 +432,97 @@ var Keyboard = function(){
    
 		}
 
+		var showKey =function(key){
+
+		switch (key)
+			{
+
+				case 'Tilde': return '~';
+				break;
+
+				case 'Num1' : return '1';
+				break;
+
+				case 'Num2' : return '2';
+				break;
+
+				case 'Num3' : return '3';
+				break;
+
+				case 'Num4' : return '4';
+				break;
+
+				case 'Num5' : return '5';
+				break;
+
+				case 'Num6' : return '6';
+				break;
+
+				case 'Num7' : return '7';
+				break;
+
+				case 'Num8' : return '8';
+				break;
+
+				case 'Num9' : return '9';
+				break;
+
+				case 'Num0' : return '0';
+				break;
+
+				case 'Minus' : return '-';
+				break;
+
+				case 'Equal' : return '=';
+				break;
+
+
+				case 'LeftBracket' : return '{';
+				break;
+
+				case 'RightBracket' : return '}';
+				break;
+
+				case 'BackSlash' : return '\\';
+				break;
+
+
+				case 'Semicolon' : return ';';
+				break;
+
+				case 'Quote' : return '\'';
+				break;
+
+				case 'Return' : return '\n';
+				break;
+
+				case 'Comma' : return ',';
+				break;
+
+				case 'Period' : return '.';
+				break;
+
+				case 'Question' : return '?';
+				break;
+
+				default:
+				if (!capsOn){
+					return key.toLowerCase();
+				}
+				else{
+					return key;
+				}
+				
+			}
+		
+
+	}
+
 		var filter_coords=function(coords,possible_letters,coordsMap,neighborMap,flag)
 		{
 			var filtered_coords=[];
 
-
+			
 
 			if (flag){
 				filtered_coords=coords;
@@ -367,19 +533,24 @@ var Keyboard = function(){
 
 			for (var i=0;i<coords.length;i++)
 			{
-				if (coords[i]["key"].toLowerCase() in possible_letters || coords[i]["key"].toLowerCase()=='space' || coords[i]["key"].toLowerCase()=='delete' || coords[i]["key"].toLowerCase()=='capslock')
+
+				if (coords[i]["key"].toLowerCase() in possible_letters || coords[i]["key"].toLowerCase() in exceptions)
 				{	
 					
 					filtered_coords.push(coords[i]);
+					
 				}
 			}
 
 			}
 			//console.log(coords);
 			//console.log(coordsMap);
+			
+			
 			for (var i=0;i<filtered_coords.length;i++)
 			{
-				if (!(filtered_coords[i]["key"].toLowerCase()=='space' || filtered_coords[i]["key"].toLowerCase()=='delete' || filtered_coords[i]["key"].toLowerCase()=='capslock')){
+				if (!(filtered_coords[i]["key"].toLowerCase() in exceptions)){
+				
 						var currentKey=filtered_coords[i]["key"];
 						
 						if (currentKey in neighborMap){
@@ -390,7 +561,8 @@ var Keyboard = function(){
 							var down_neighbor=neighborMap[currentKey][3];
 
 				
-
+						if (!(left_neighbor=='None'))
+						{
 						if (!(left_neighbor.toLowerCase() in possible_letters)){
 								var left_neighbor_neighbour=neighborMap[left_neighbor][0];
 								filtered_coords[i]['xMin']=coordsMap[left_neighbor]['xMin'];
@@ -405,10 +577,13 @@ var Keyboard = function(){
 								
 								
 						}
+					}
 
+						if (!(right_neighbor=='None'))
+						{
 
-						if (!(right_neighbor.toLowerCase() in possible_letters)){
-									
+						if (!(right_neighbor.toLowerCase() in possible_letters)) {
+								
 								var right_neighbor_neighbour=neighborMap[right_neighbor][1];
 								
 
@@ -417,11 +592,13 @@ var Keyboard = function(){
 								filtered_coords[i]['x']=.5*(coordsMap[right_neighbor]['xMax']+filtered_coords[i]['xMin']);
 								filtered_coords[i]['w']=filtered_coords[i]['w']+coordsMap[right_neighbor]['w'];
 								neighborMap[currentKey][1]=right_neighbor_neighbour;
-								neighborMap[right_neighbor_neighbour][0]=currentKey;
-								
+								if (!(right_neighbor_neighbour=="None")){
+									neighborMap[right_neighbor_neighbour][0]=currentKey;
+								}
 							
 
 						}
+					}
 
 						
 
@@ -439,8 +616,8 @@ var Keyboard = function(){
 
 					}
 				
-
 			}
+			
 
 		}
 
@@ -448,7 +625,7 @@ var Keyboard = function(){
 
 		for (var i=0;i<filtered_coords.length;i++)
 			{
-				if (!(filtered_coords[i]["key"].toLowerCase()=='space' || filtered_coords[i]["key"].toLowerCase()=='delete')){
+				if (!(filtered_coords[i]["key"].toLowerCase() in exceptions)){
 						var currentKey=filtered_coords[i]["key"];
 						//console.log(currentKey);
 						if (currentKey in neighborMap){
@@ -460,7 +637,7 @@ var Keyboard = function(){
 							
 					
 
-						if (!(down_neighbor=='None'))
+						if (!(down_neighbor=='None') && !(neighborMap[down_neighbor][1]=="None"))
 						{
 						var left_corner_neighbor=neighborMap[down_neighbor][0];
 						var right_corner_neighbor=neighborMap[down_neighbor][1];
@@ -512,7 +689,7 @@ var Keyboard = function(){
 		}
 
 
-
+	
 
 
 

@@ -3,61 +3,6 @@ var word_to_index={};
 var index_to_word=[];
 np=numpy;
 var capsOn=false;
-var predictOn=false;
-document.getElementById('cb').checked=false;
-handleClick();
-// function getUserIP(onNewIP) { //  onNewIp - your listener function for new IPs
-//     //compatibility for firefox and chrome
-//     var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-//     var pc = new myPeerConnection({
-//         iceServers: []
-//     }),
-//     noop = function() {},
-//     localIPs = {},
-//     ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
-//     key;
-
-//     function iterateIP(ip) {
-//         if (!localIPs[ip]) onNewIP(ip);
-//         localIPs[ip] = true;
-//     }
-
-//      //create a bogus data channel
-//     pc.createDataChannel("");
-
-//     // create offer and set local description
-//     pc.createOffer().then(function(sdp) {
-//         sdp.sdp.split('\n').forEach(function(line) {
-//             if (line.indexOf('candidate') < 0) return;
-//             line.match(ipRegex).forEach(iterateIP);
-//         });
-        
-//         pc.setLocalDescription(sdp, noop, noop);
-//     }).catch(function(reason) {
-//         // An error occurred, so handle the failure to connect
-//     });
-
-//     //listen for candidate events
-//     pc.onicecandidate = function(ice) {
-//         if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
-//         ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
-//     };
-// }
-
-// // Usage
-
-// getUserIP(function(ip){
-// 	var str1="ws://";
-// 	//alert(str1.concat(ip,":5678/"));
-//     var ws = new WebSocket("ws://172.16.16.163:5678/");
-// });
-var ws = new WebSocket("ws://172.16.16.163:5678/");
-
-document.getElementById('Bt').style.visibiity='hidden';
-
-$(function() {
-                        $('#toggle-one').bootstrapToggle();
-                      })
 d3.csv("/data/words.csv", function(data) {
 		data.forEach(function(d) {
 	word_list.push(d["word"]);
@@ -314,49 +259,31 @@ var all_letters={};
     	//var keys = _.map(kbCoords,function(d){ return d.key; }); 
     	all_coords=kbCoords;
     	var offset=0;
-    	
-    	for (var count=0;count<12;count++){
+    	for (var count=15;count<27;count++){
 			var neighborArray=[];
 			
-			if (count==0){
-				neighborArray.push("None");
-			}
-			else{
 			neighborArray.push(kbCoords[count-1]['key']);
-			}
 			neighborArray.push(kbCoords[count+1]['key']);
-			//neighborArray.push(kbCoords[count-14]['key']);
-			neighborArray.push('None');
-			neighborArray.push(kbCoords[count+11]['key']);
+			neighborArray.push(kbCoords[count-14]['key']);
+			neighborArray.push(kbCoords[count+14]['key']);
 			neighborMap[kbCoords[count]['key']]=neighborArray;
 			all_letters[kbCoords[count]['key'].toLowerCase()]=1;
 		}
-		for (var count=11;count<22;count++){
+		for (var count=29;count<40;count++){
 			var neighborArray=[];
-			if (count==11){
-				neighborArray.push("None");
-			}
-			else{
 			neighborArray.push(kbCoords[count-1]['key']);
-			}
-			
 			neighborArray.push(kbCoords[count+1]['key']);
-			neighborArray.push(kbCoords[count-11]['key']);
-			neighborArray.push(kbCoords[count+12]['key']);
+			neighborArray.push(kbCoords[count-14]['key']);
+			neighborArray.push(kbCoords[count+13]['key']);
 			neighborMap[kbCoords[count]['key']]=neighborArray;
 			all_letters[kbCoords[count]['key'].toLowerCase()]=1;
 		}
-		for (var count=23;count<33;count++){
+		for (var count=42;count<51;count++){
 			var neighborArray=[];
-			if (count==23){
-				neighborArray.push("None");
-			}
-			else{
 			neighborArray.push(kbCoords[count-1]['key']);
-			}
-			
 			neighborArray.push(kbCoords[count+1]['key']);
-			neighborArray.push(kbCoords[count-12]['key']);
+			neighborArray.push(kbCoords[count-13]['key']);
+			//neighborArray.push(kbCoords[count+13]['key']);
 			neighborArray.push('None');
 			neighborMap[kbCoords[count]['key']]=neighborArray;
 			all_letters[kbCoords[count]['key'].toLowerCase()]=1;
@@ -365,14 +292,7 @@ var all_letters={};
 		// neighborMap['B'][3]='Space';
 		// neighborMap['N'][3]='Space';
 		// neighborMap['M'][3]='Space';
-		neighborMap['P'][1]="None";
-		neighborMap['L'][1]="None";
-		neighborMap['M'][1]="None";
-		neighborMap['L'][3]="None";
-		neighborMap['K'][3]="None";
-		neighborMap['P'][3]="None";
-		//neighborMap['Quote'][3]="None";
-		//neighborMap['BackSlash'][3]="None";
+
 		neighborMap['Tab']=['A','A','A','A'];
 		neighborMap['Tab'][0]='None';
 		neighborMap['Tab'][1]='Q';
@@ -519,12 +439,8 @@ var all_letters={};
 			.id(100).divId('All_Users')
 			//.title('All Users',formatSubtitle(totalChars))
 			.scale(4)('#keyboards',kbCoords); 
-		if(isMobile.iOS()){
-			document.getElementById("keyboards").style.transform = "scale(1.87)";
-		}
-		else{
-			document.getElementById("keyboards").style.transform = "scale(1.39)";
-		}
+
+
 		$('*').tooltip({
     		'trigger':'hover'
 	        ,'container': 'body'
@@ -1076,19 +992,5 @@ function accept(){
 
 	document.getElementById('echoField').value=document.getElementById('echoField').value+document.getElementById('Predict').value;
 }
-function handleClick(){
-  
-  predictOn=document.getElementById('cb').checked;
-  if (!predictOn){
-	document.getElementById('Predict').style.display='none';
-	document.getElementById('Suggested Word').style.display='none';
-	document.getElementById('Accept').style.display='none';
-	}
-  else{
-  	document.getElementById('Suggested Word').setAttribute("style", "text-align: left");
-	document.getElementById('Predict').setAttribute("style", "width: 500px; height: 25px;");
-	document.getElementById('Accept').style.display='block';
 
-	}	
-}
 
